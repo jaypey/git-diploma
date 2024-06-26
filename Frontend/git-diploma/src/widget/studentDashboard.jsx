@@ -1,35 +1,64 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from './styles.module.css';
-import {projet} from './data.js'
+import { projet } from './data.js';
+import api from '../api/axiosConfig';
 import { Link } from "react-router-dom";
 
 const StudentDashboard = () => {
 
-    const openProjet = projet.filter(projet => projet.remise > Date.now());
-    const closedProjet = projet.filter(projet => projet.remise < Date.now());
-    const upcomingP = projet.filter(projet => projet.remise > Date.now()).sort(projet => projet.remise).reverse();
+    const [projects, setProjects] = useState([]);
 
-    const listeProjet = openProjet.map(openProjet =>
-        <tr>
-            <td><Link to={`/project/${openProjet.projectId}`} params>{openProjet.name}</Link></td>
-            <td>{openProjet.cour}</td>
-            <td>--:--:--</td>
-        </tr>
-    );
-    const ancienProjet = closedProjet.map(closedProjet =>
-        <tr>
-            <td>{closedProjet.name}</td>
-            <td>{closedProjet.cour}</td>
-            <td>--:--:--</td>
-        </tr>
+    const openProjet = projects.filter(project => new Date(project.courses[0].remise) >= Date.now());
+    const closedProjet = projects.filter(project => new Date(project.courses[0].remise) < Date.now());
+    const upcomingP = projects.filter(project => new Date(project.courses[0].remise) > Date.now()).sort(project => project.courses[0].remise).reverse();
+    
+    const listeProjet = openProjet.map((project, index) => {
+        const sigles = project.courses.map(course => course.sigle).join(", ");
+        return (
+            <tr key={index}>
+                <td><Link to={`/project/${project.id_project}`}>{sigles}</Link></td>
+                <td>{new Date(project.courses[0].remise).toLocaleDateString("en-US")}</td>
+            </tr>
+        );
+    });
+
+    const ancienProjet = closedProjet.map((project, index) =>{
+        const sigles = project.courses.map(course => course.sigle).join(", ");
+        return(
+            <tr key={index}>
+                <td><Link to={`/project/${project.id_project}`}>{sigles}</Link></td>
+                <td>{new Date(project.courses[0].remise).toLocaleDateString("en-US")}</td>
+            </tr>
+        );
+    }
     );
 
-    const upcoming = upcomingP.map(upcomingP =>
-        <li>
-            <p>{upcomingP.name}</p>
-            <p>{upcomingP.remise.toLocaleDateString("en-US")}</p>
-        </li>
+    const upcoming = upcomingP.map(project =>{
+        const sigles = project.courses.map(course => course.sigle).join(", ");
+        return(
+            <li>
+                <p>{sigles}</p>
+                <p>{new Date(project.courses[0].remise).toLocaleDateString("en-US")}</p>
+            </li>
+        )
+    }
     )
+
+    const getProjects = async () => {
+        try {
+            const response = await api.get("/api/student/getProjects", {
+                params: { cip: "lepl1501" }
+            });
+            console.log(response);
+            setProjects(response.data);
+        } catch (err) {
+            console.log("Error fetching data:", err);
+        }
+    };
+
+    useEffect(() => {
+        getProjects();
+    }, []);
 
     return (
         <>
@@ -42,8 +71,7 @@ const StudentDashboard = () => {
                         <table className={styles.tableProjet}>
                             <thead>
                                 <tr>
-                                    <th>nom</th>
-                                    <th>cours</th>
+                                    <th>Identifiant</th>
                                     <th>last commit</th>
                                 </tr>
                             </thead>
@@ -57,12 +85,15 @@ const StudentDashboard = () => {
                     <h2>anciens projets</h2>
                     <div>
                         <table className={styles.tableProjet}>
-                            <tr>
-                                <th>nom</th>
-                                <th>cours</th>
-                                <th>last commit</th>
-                            </tr>
-                            {ancienProjet}
+                            <thead>
+                                <tr>
+                                    <th>cours</th>
+                                    <th>last commit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {ancienProjet}
+                            </tbody>
                         </table>
                     </div>
                 </div>

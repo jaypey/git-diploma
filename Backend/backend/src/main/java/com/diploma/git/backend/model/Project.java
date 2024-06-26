@@ -3,14 +3,24 @@ package com.diploma.git.backend.model;
 import java.util.List;
 
 public class Project {
-    private String id_project;
+    private int id_project;
     private List<Student> students;
+    List<Course> courses;
+    private int max_member;
 
-    public String getId_project() {
+    public int getMax_member() {
+        return max_member;
+    }
+
+    public void setMax_member(int max_member) {
+        this.max_member = max_member;
+    }
+
+    public int getId_project() {
         return id_project;
     }
 
-    public void setId_project(String id_project) {
+    public void setId_project(int id_project) {
         this.id_project = id_project;
     }
 
@@ -20,5 +30,13 @@ public class Project {
 
     public void setStudents(List<Student> students) {
         this.students = students;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
     }
 }

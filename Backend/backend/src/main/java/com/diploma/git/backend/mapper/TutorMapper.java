@@ -15,7 +15,7 @@ public interface TutorMapper {
             "INNER JOIN student_project " +
             "ON s.cip = student_project.cip " +
             "WHERE student_project.id_project = #{id_project} ")
-    List<Student> getStudentsFromProject(@PathParam("id_project") String id_project);
+    List<Student> getStudentsFromProject(@PathParam("id_project") int id_project);
 
     @Select("SELECT p.id_project " +
             "FROM project p " +
@@ -39,10 +39,10 @@ public interface TutorMapper {
     @Select("SELECT e.id_event, e.cip, e.date_event, e.id_project " +
             "FROM event e " +
             "WHERE e.id_project = #{id_project} ")
-    List<Event> getEventFromProject(@PathParam("id_project") String id_project);
+    List<Event> getEventFromProject(@PathParam("id_project") int id_project);
 
     @Select("SELECT f.id_file, f.name, f.size, f.last_change, f.id_project " +
             "FROM file f " +
             "WHERE f.id_project = #{id_project} ")
-    List<File> getFilesFromProject(@PathParam("id_project") String id_project);
+    List<File> getFilesFromProject(@PathParam("id_project") int id_project);
 }

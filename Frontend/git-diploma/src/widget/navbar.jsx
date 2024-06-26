@@ -22,8 +22,8 @@ const Navbar = () => {
                 <NavLink to="/" >
                   home
                 </NavLink>
-                <NavLink to="/aide">
-                  aide
+                <NavLink to="/equipe">
+                  équipe
                 </NavLink>
                 {/* Second Nav */}
                 {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}

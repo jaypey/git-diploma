@@ -19,14 +19,16 @@ public class TeamController {
     @GetMapping("/getProjects")
     public List<Project> getProjects(@RequestParam(value = "sigle") String sigle) {
         List<Project> teams = teamMapper.getProjectsFromCourse(sigle);
-        for(int i = 0; i < teams.size(); i++)
+        for(int i = 0; i < teams.size(); i++) {
             teams.get(i).setStudents(teamMapper.getStudentsFromProject(teams.get(i).getId_project()));
+            teams.get(i).setMax_member(teamMapper.getTeamSizeFromCourse(sigle));
+        }
         return teams;
     }
 
     @GetMapping("/registerInProject")
     public boolean registerInProject(@RequestParam(value = "sigle") String sigle,
-                                  @RequestParam(value = "id_project") String id_project,
+                                  @RequestParam(value = "id_project") int id_project,
                                   @RequestParam(value = "cip") String cip) {
         if (isInProject(sigle, cip))
             return false;
@@ -46,11 +48,4 @@ public class TeamController {
         }
         return false;
     }
-
-    /*
-    @GetMapping("/getProjects")
-    public List<Project> getProjects(@RequestParam(value = "cip") String cip) {
-        return studentMapper.getProjectsFromStudent(cip);
-    }
-     */
 }

@@ -8,7 +8,9 @@ import {
 } from 'react-router-dom';
 import StudentDashboard from './widget/studentDashboard.jsx';
 import ProjectDetails from './widget/projectDetails.jsx';
-import Login from './widget/loginPage.jsx'
+import Login from './widget/loginPage.jsx';
+import CourseSelection from './widget/CourseSelection.jsx';
+import TeamBody from './widget/Team/TeamBody.jsx';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,14 @@ const router = createBrowserRouter([
       {
         path: "Login",
         element: <Login />
+      },
+      {
+         path: "equipe",
+         element: <CourseSelection />
+      },
+      {
+         path: "student/teamBody/:sigle",
+         element: <TeamBody />
       }
     ]
   },
