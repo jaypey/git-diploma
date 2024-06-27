@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @MappedTypes(Users.class)
 @MapperScan("com.diploma.git.backend.mapper")
-
 @SpringBootApplication
 public class BackendApplication {
 

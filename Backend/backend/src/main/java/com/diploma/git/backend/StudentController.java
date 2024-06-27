@@ -1,5 +1,8 @@
 package com.diploma.git.backend;
 
+import com.diploma.git.backend.gitolite.GitoliteManager;
+import com.diploma.git.backend.model.Project;
+import com.diploma.git.backend.model.Student;
 import com.diploma.git.backend.mapper.StudentMapper;
 import com.diploma.git.backend.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +17,14 @@ import java.util.List;
 @RequestMapping("/api/student")
 @CrossOrigin
 public class StudentController {
+    private GitoliteManager gitoliteManager;
     @Autowired
     StudentMapper studentMapper;
+
+    @Autowired
+    public StudentController(GitoliteManager gitoliteManager){
+        this.gitoliteManager = gitoliteManager;
+    }
 
     @GetMapping("/getStudents")
     public List<Student> getStudents(@RequestParam(value = "id_project") String id_project) {
